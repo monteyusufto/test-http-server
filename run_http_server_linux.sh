@@ -3,6 +3,8 @@
 # Get the current directory where the script is located
 SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 
+mkdir -p "$SCRIPT_DIR/uploads"
+
 echo "Building Docker image..."
 docker build -t test-http-server "$SCRIPT_DIR"
 if [ $? -ne 0 ]; then
@@ -11,7 +13,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Running Docker container..."
-docker run -d --name test-http-server -p 80:5000 -v "$SCRIPT_DIR":/app/uploads test-http-server
+docker run -d --name test-http-server -p 80:5000 -v "$SCRIPT_DIR/uploads":/app/uploads test-http-server
 if [ $? -ne 0 ]; then
     echo "Docker container run failed. Exiting."
     exit 1
